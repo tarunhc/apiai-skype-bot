@@ -50,10 +50,9 @@ module.exports = class SkypeBotConfig {
         this._devConfig = value;
     }
 
-    constructor(apiaiAccessToken, apiaiLang, botId, appId, appSecret) {
+    constructor(apiaiAccessToken, apiaiLang, appId, appSecret) {
         this._apiaiAccessToken = apiaiAccessToken;
         this._apiaiLang = apiaiLang;
-        this._skypeBotId = botId;
         this._skypeAppId = appId;
         this._skypeAppSecret = appSecret;
     }
@@ -62,7 +61,6 @@ module.exports = class SkypeBotConfig {
         return {
             apiaiAccessToken: this._apiaiAccessToken,
             apiaiLang: this._apiaiLang,
-            skypeBotId: this._skypeBotId,
             skypeAppId: this._skypeAppId,
             skypeAppSecret: this._skypeAppSecret
         }
@@ -71,8 +69,7 @@ module.exports = class SkypeBotConfig {
     static fromPlainDoc(doc){
         return new SkypeBotConfig(
             doc.apiaiAccessToken,
-            doc.apiaiLang, 
-            doc.skypeBotId, 
+            doc.apiaiLang,
             doc.skypeAppId, 
             doc.skypeAppSecret);
     }

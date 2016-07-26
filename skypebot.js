@@ -2,7 +2,7 @@
 
 const apiai = require('apiai');
 const uuid = require('node-uuid');
-const skype = require('skype-sdk');
+const botbuilder = require('botbuilder');
 
 module.exports = class SkypeBot {
 
@@ -48,30 +48,25 @@ module.exports = class SkypeBot {
         this._apiaiService = apiai(botConfig.apiaiAccessToken, apiaiOptions);
         this._sessionIds = new Map();
 
-        this._botService = new skype.BotService({
-            messaging: {
-                botId: this.botConfig.skypeBotId,
-                serverUrl: "https://apis.skype.com",
-                requestTimeout: 15000,
-                appId: this.botConfig.skypeAppId,
-                appSecret: this.botConfig.skypeAppSecret
+        this.botService = new botbuilder.ChatConnector({
+            appId: this.botConfig.skypeAppId,
+            appPassword: this.botConfig.skypeAppSecret
+        });
+
+        this._bot = new botbuilder.UniversalBot(this.botService);
+
+        this._bot.dialog('/', (session) => {
+            if (session.message && session.message.text) {
+                this.processMessage(session);
             }
-        });
-
-        this.botService.on('contactAdded', (bot, data) => {
-            console.log("contactAdded", data.from);
-        });
-
-        this.botService.on('personalMessage', (bot, data) => {
-            this.processMessage(bot, data);
         });
 
     }
 
-    processMessage(bot, data) {
+    processMessage(session) {
 
-        let messageText = data.content;
-        let sender = data.from;
+        let messageText = session.message.text;
+        let sender = session.message.address.conversation.id;
 
         if (messageText && sender) {
 
@@ -96,7 +91,7 @@ module.exports = class SkypeBot {
 
                     if (SkypeBot.isDefined(responseText)) {
                         console.log(sender, 'Response as text message');
-                        bot.reply(responseText, true);
+                        session.send(responseText);
 
                     } else {
                         console.log(sender, 'Received empty speech');
