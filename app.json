@@ -14,16 +14,12 @@
       "value": "en",
       "required": false
     },
-    "BOT_ID": {
-      "description": "Skype bot id",
-      "value": ""
-    },
     "APP_ID": {
-      "description": "Skype app id",
+      "description": "Microsoft App ID",
       "value": ""
     },
     "APP_SECRET": {
-      "description": "Skype app secret",
+      "description": "Microsoft App Password",
       "value": ""
     }
   },
