@@ -78,7 +78,11 @@ module.exports = class SkypeBot {
 
             let apiaiRequest = this._apiaiService.textRequest(messageText,
                 {
-                    sessionId: this._sessionIds.get(sender)
+                    sessionId: this._sessionIds.get(sender),
+                    originalRequest: {
+                        data: session.message,
+                        source: "skype"
+                    }
                 });
 
             apiaiRequest.on('response', (response) => {
