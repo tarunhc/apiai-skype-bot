@@ -9,7 +9,7 @@ const SkypeBotConfig = require('./skypebotconfig');
 const appjson = require('./app.json');
 
 
-const REST_PORT = (process.env.VCAP_APP_PORT || 8080);
+const REST_PORT = (process.env.PORT || 5000);
 
 const botConfig = new SkypeBotConfig(
     appjson.env.APIAI_ACCESS_TOKEN.value,
