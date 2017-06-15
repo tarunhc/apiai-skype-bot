@@ -6,14 +6,16 @@ const bodyParser = require('body-parser');
 
 const SkypeBot = require('./skypebot');
 const SkypeBotConfig = require('./skypebotconfig');
+const appjson = require('./app.json');
 
-const REST_PORT = (process.env.PORT || 5000);
+
+const REST_PORT = (process.env.VCAP_APP_PORT || 8080);
 
 const botConfig = new SkypeBotConfig(
-    process.env.APIAI_ACCESS_TOKEN,
-    process.env.APIAI_LANG,
-    process.env.APP_ID,
-    process.env.APP_SECRET
+    appjson.env.APIAI_ACCESS_TOKEN.value,
+    appjson.env.APIAI_LANG.value,
+    appjson.env.APP_ID.value,
+    appjson.env.APP_SECRET.value
 );
 
 const skypeBot = new SkypeBot(botConfig);
@@ -25,7 +27,10 @@ const app = express();
 app.use(bodyParser.json());
 
 app.post('/chat', skypeBot.botService.listen());
-
+app.get('/', function(req,res)
+{
+    res.send("Welcome to FV Support")
+})
 app.listen(REST_PORT, function () {
     console.log('Rest service ready on port ' + REST_PORT);
 });

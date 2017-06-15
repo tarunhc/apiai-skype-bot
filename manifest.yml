@@ -1,0 +1,8 @@
+---
+applications:
+  - name: ge-og-supportBot
+    host: ge-og-supportBot
+    memory: 1G
+    buildpack: https://github.com/cloudfoundry/nodejs-buildpack
+    command: node app.js
+    timeout: 180

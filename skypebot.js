@@ -1,8 +1,11 @@
 'use strict';
 
 const apiai = require('apiai');
-const uuid = require('node-uuid');
+const uuid = require('uuid');
 const botbuilder = require('botbuilder');
+const replies = require('./support files/replies');
+const helpers = require('./support files/helpers');
+const intentactions = require('./support files/intentactions');
 
 module.exports = class SkypeBot {
 
@@ -95,7 +98,7 @@ module.exports = class SkypeBot {
                     let responseMessages = response.result.fulfillment.messages;
 
                     if (SkypeBot.isDefined(responseMessages) && responseMessages.length > 0) {
-                        this.doRichContentResponse(session, responseMessages);
+                        this.doRichContentResponse(session, response);
                     } else if (SkypeBot.isDefined(responseText)) {
                         console.log(sender, 'Response as text message');
                         session.send(responseText);
@@ -118,114 +121,123 @@ module.exports = class SkypeBot {
         }
     }
 
-    doRichContentResponse(session, messages) {
+    doRichContentResponse(session, response) {
 
-        for (let messageIndex = 0; messageIndex < messages.length; messageIndex++) {
-            let message = messages[messageIndex];
+        let messages = response.result.fulfillment.messages;
+        let intent = response.result.metadata.intentName;
+        let reply = this.createReplies(intent);
+        let message = messages[0];
 
-            switch (message.type) {
-                //message.type 0 means text message
-                case 0:
-                    {
-
-                        if (SkypeBot.isDefined(message.speech)) {
-                            session.send(message.speech);
-                        }
-
+        switch (message.type) {
+            //message.type 0 means text message
+            case 0:
+                {
+                    if (SkypeBot.isDefined(reply)) {
+                        session.send(reply);
                     }
 
-                    break;
+                }
 
-                    //message.type 1 means card message
-                case 1:
-                    {
-                        let heroCard = new botbuilder.HeroCard(session).title(message.title);
+                break;
 
-                        if (SkypeBot.isDefined(message.subtitle)) {
-                            heroCard = heroCard.subtitle(message.subtitle)
-                        }
+            //message.type 1 means card message
+            case 1:
+                {
+                    let heroCard = new botbuilder.HeroCard(session).title(message.title);
 
-                        if (SkypeBot.isDefined(message.imageUrl)) {
-                            heroCard = heroCard.images([botbuilder.CardImage.create(session, message.imageUrl)]);
-                        }
+                    if (SkypeBot.isDefined(message.subtitle)) {
+                        heroCard = heroCard.subtitle(message.subtitle)
+                    }
 
-                        if (SkypeBot.isDefined(message.buttons)) {
+                    if (SkypeBot.isDefined(message.imageUrl)) {
+                        heroCard = heroCard.images([botbuilder.CardImage.create(session, message.imageUrl)]);
+                    }
 
-                            let buttons = [];
+                    if (SkypeBot.isDefined(message.buttons)) {
 
-                            for (let buttonIndex = 0; buttonIndex < message.buttons.length; buttonIndex++) {
-                                let messageButton = message.buttons[buttonIndex];
-                                if (messageButton.text) {
-                                    let postback = messageButton.postback;
-                                    if (!postback) {
-                                        postback = messageButton.text;
-                                    }
+                        let buttons = [];
 
-                                    let button;
-
-                                    if (postback.startsWith("http")) {
-                                        button = botbuilder.CardAction.openUrl(session, postback, messageButton.text);
-                                    } else {
-                                        button = botbuilder.CardAction.postBack(session, postback, messageButton.text);
-                                    }
-
-                                    buttons.push(button);
+                        for (let buttonIndex = 0; buttonIndex < message.buttons.length; buttonIndex++) {
+                            let messageButton = message.buttons[buttonIndex];
+                            if (messageButton.text) {
+                                let postback = messageButton.postback;
+                                if (!postback) {
+                                    postback = messageButton.text;
                                 }
+
+                                let button;
+
+                                if (postback.startsWith("http")) {
+                                    button = botbuilder.CardAction.openUrl(session, postback, messageButton.text);
+                                } else {
+                                    button = botbuilder.CardAction.postBack(session, postback, messageButton.text);
+                                }
+
+                                buttons.push(button);
                             }
-
-                            heroCard.buttons(buttons);
-
                         }
 
-                        let msg = new botbuilder.Message(session).attachments([heroCard]);
-                        session.send(msg);
+                        heroCard.buttons(buttons);
 
                     }
 
-                    break;
+                    let msg = new botbuilder.Message(session).attachments([heroCard]);
+                    session.send(msg);
 
-                    //message.type 2 means quick replies message
-                case 2:
-                    {
+                }
 
-                        let replies = [];
+                break;
 
-                        let heroCard = new botbuilder.HeroCard(session).title(message.title);
+            //message.type 2 means quick replies message
+            case 2:
+                {
 
-                        if (SkypeBot.isDefined(message.replies)) {
+                    let replies = [];
 
-                            for (let replyIndex = 0; replyIndex < message.replies.length; replyIndex++) {
-                                let messageReply = message.replies[replyIndex];
-                                let reply = botbuilder.CardAction.postBack(session, messageReply, messageReply);
-                                replies.push(reply);
-                            }
+                    let heroCard = new botbuilder.HeroCard(session).title(message.title);
 
-                            heroCard.buttons(replies);
+                    if (SkypeBot.isDefined(message.replies)) {
+
+                        for (let replyIndex = 0; replyIndex < message.replies.length; replyIndex++) {
+                            let messageReply = message.replies[replyIndex];
+                            let reply = botbuilder.CardAction.postBack(session, messageReply, messageReply);
+                            replies.push(reply);
                         }
 
-                        let msg = new botbuilder.Message(session).attachments([heroCard]);
-                        session.send(msg);
-
+                        heroCard.buttons(replies);
                     }
 
-                    break;
+                    let msg = new botbuilder.Message(session).attachments([heroCard]);
+                    session.send(msg);
 
-                    //message.type 3 means image message
-                case 3:
-                    {
-                        let heroCard = new botbuilder.HeroCard(session).images([botbuilder.CardImage.create(session, message.imageUrl)]);
-                        let msg = new botbuilder.Message(session).attachments([heroCard]);
-                        session.send(msg);
-                    }
+                }
 
-                    break;
+                break;
 
-                default:
+            //message.type 3 means image message
+            case 3:
+                {
+                    let heroCard = new botbuilder.HeroCard(session).images([botbuilder.CardImage.create(session, message.imageUrl)]);
+                    let msg = new botbuilder.Message(session).attachments([heroCard]);
+                    session.send(msg);
+                }
 
-                    break;
-            }
+                break;
+
+            default:
+
+                break;
         }
+        //}
+    }
 
+    createReplies(intentName) {
+        var type = typeof intentactions[intentName];
+        if (type == 'function') {
+            return intentactions[intentName]();
+        }
+        else
+            return 'There is something missing here. Hope I can serve you some other time.';
     }
 
     static isDefined(obj) {
