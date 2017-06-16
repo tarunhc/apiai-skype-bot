@@ -6,9 +6,6 @@ module.exports = class replies {
         return [
             'Hello! How can I help you?',
             'Hi! How can I be of your help',
-            'Hello! Need Assistance?',
-            'Hi! Welcome',
-            'Hi! Nice to have have you here!',
             'Welcome! How can I help you?'
         ];
     }
@@ -50,7 +47,7 @@ module.exports = class replies {
 
     static get oldFVUrl() {
         return [
-            'Please try using this link ge.fv.geoilandgas.com and let me know the outcome'
+            'Please try using this link ge.fv.geoilandgas.com and let me know if its working'
         ];
     }
 
