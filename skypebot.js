@@ -6,9 +6,16 @@ const botbuilder = require('botbuilder');
 const replies = require('./support files/replies');
 const helpers = require('./support files/helpers');
 const intentactions = require('./support files/intentactions');
-
 module.exports = class SkypeBot {
 
+    //  get context() {
+    //     return this.context;
+    // }
+
+    // set context(value) {
+    //     this.context = value;
+    // }
+    
     get apiaiService() {
         return this._apiaiService;
     }
@@ -48,6 +55,7 @@ module.exports = class SkypeBot {
             requestSource: "skype"
         };
 
+        this.context = null;
         this._apiaiService = apiai(botConfig.apiaiAccessToken, apiaiOptions);
         this._sessionIds = new Map();
 
@@ -70,7 +78,7 @@ module.exports = class SkypeBot {
 
         let messageText = session.message.text;
         let sender = session.message.address.conversation.id;
-
+        let options = null;
         if (messageText && sender) {
 
             console.log(sender, messageText);
@@ -79,13 +87,36 @@ module.exports = class SkypeBot {
                 this._sessionIds.set(sender, uuid.v1());
             }
 
-            let apiaiRequest = this._apiaiService.textRequest(messageText,
-                {
+            if(this.context != null)
+            {
+                 options = {
+                    sessionId: this._sessionIds.get(sender),
+                    originalRequest: {
+                        data: session.message,
+                        source: "skype"
+                    },
+                    contexts: this.context
+                };
+            }
+            else
+            {
+                 options = {
                     sessionId: this._sessionIds.get(sender),
                     originalRequest: {
                         data: session.message,
                         source: "skype"
                     }
+                };
+            }
+
+           
+            let apiaiRequest = this._apiaiService.textRequest(messageText,{
+                    sessionId: this._sessionIds.get(sender),
+                    originalRequest: {
+                        data: session.message,
+                        source: "skype"
+                    },
+                    contexts: this.context
                 });
 
             apiaiRequest.on('response', (response) => {
@@ -96,6 +127,7 @@ module.exports = class SkypeBot {
                 if (SkypeBot.isDefined(response.result) && SkypeBot.isDefined(response.result.fulfillment)) {
                     let responseText = response.result.fulfillment.speech;
                     let responseMessages = response.result.fulfillment.messages;
+                    this.context = response.result.contexts;
 
                     if (SkypeBot.isDefined(responseMessages) && responseMessages.length > 0) {
                         this.doRichContentResponse(session, response);
@@ -125,6 +157,7 @@ module.exports = class SkypeBot {
 
         let messages = response.result.fulfillment.messages;
         let intent = response.result.metadata.intentName;
+        let entity = response.result.metadata.entity;
         let reply = this.createReplies(intent);
         let message = messages[0];
 
