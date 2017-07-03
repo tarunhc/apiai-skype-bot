@@ -24,7 +24,7 @@
     },
     "KNOWLEDGEBASE_PATH": {
       "description": "Path to the Knowledge base .xml file; relative to xmlParser file",
-      "value": "C:\\D_Drive\\Jarvis\\Support-Bots\\node\\knowledgeBaseOnboarding.xml"
+      "value": ".\\\node\\knowledgeBaseOnboarding.xml"
     },
     "ENCODING": {
       "description": "The Encoding to use for the knowledge base .xml file",
