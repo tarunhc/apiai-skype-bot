@@ -19,6 +19,8 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="app.json" />
+    <Content Include="knowledgeBaseOnboarding.xml" />
+    <Content Include="knowledgeBase.xml" />
     <Content Include="LICENSE" />
     <Content Include="LICENSE.txt" />
     <Content Include="manifest.yml" />
@@ -37,6 +39,8 @@
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </Compile>
+    <Compile Include="xmlHandler.1.js" />
+    <Compile Include="xmlHandler.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="tests\" />

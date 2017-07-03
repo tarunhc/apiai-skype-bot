@@ -1,0 +1,2 @@
+C:\D_Drive\Jarvis\Support-Bots\node\obj\Debug\SkypeNodeBot.njsprojResolveAssemblyReference.cache
+C:\D_Drive\Jarvis\Support-Bots\node\bin\Microsoft.NodejsTools.WebRole.dll

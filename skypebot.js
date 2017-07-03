@@ -3,19 +3,10 @@
 const apiai = require('apiai');
 const uuid = require('uuid');
 const botbuilder = require('botbuilder');
-const replies = require('./support files/replies');
 const helpers = require('./support files/helpers');
-const intentactions = require('./support files/intentactions');
+const xmlHandler = require('./xmlHandler');
 module.exports = class SkypeBot {
 
-    //  get context() {
-    //     return this.context;
-    // }
-
-    // set context(value) {
-    //     this.context = value;
-    // }
-    
     get apiaiService() {
         return this._apiaiService;
     }
@@ -48,6 +39,10 @@ module.exports = class SkypeBot {
         this._sessionIds = value;
     }
 
+    get contexts() {
+        return this._contexts;
+    }
+
     constructor(botConfig) {
         this._botConfig = botConfig;
         var apiaiOptions = {
@@ -58,6 +53,7 @@ module.exports = class SkypeBot {
         this.context = null;
         this._apiaiService = apiai(botConfig.apiaiAccessToken, apiaiOptions);
         this._sessionIds = new Map();
+        this._contexts = new Map();
 
         this.botService = new botbuilder.ChatConnector({
             appId: this.botConfig.skypeAppId,
@@ -87,37 +83,15 @@ module.exports = class SkypeBot {
                 this._sessionIds.set(sender, uuid.v1());
             }
 
-            if(this.context != null)
-            {
-                 options = {
-                    sessionId: this._sessionIds.get(sender),
-                    originalRequest: {
-                        data: session.message,
-                        source: "skype"
-                    },
-                    contexts: this.context
-                };
-            }
-            else
-            {
-                 options = {
-                    sessionId: this._sessionIds.get(sender),
-                    originalRequest: {
-                        data: session.message,
-                        source: "skype"
-                    }
-                };
-            }
 
-           
-            let apiaiRequest = this._apiaiService.textRequest(messageText,{
-                    sessionId: this._sessionIds.get(sender),
-                    originalRequest: {
-                        data: session.message,
-                        source: "skype"
-                    },
-                    contexts: this.context
-                });
+            let apiaiRequest = this._apiaiService.textRequest(messageText, {
+                sessionId: this._sessionIds.get(sender),
+                originalRequest: {
+                    data: session.message,
+                    source: "skype"
+                },
+                contexts: this._contexts.get(sender)
+            });
 
             apiaiRequest.on('response', (response) => {
                 if (this._botConfig.devConfig) {
@@ -127,7 +101,8 @@ module.exports = class SkypeBot {
                 if (SkypeBot.isDefined(response.result) && SkypeBot.isDefined(response.result.fulfillment)) {
                     let responseText = response.result.fulfillment.speech;
                     let responseMessages = response.result.fulfillment.messages;
-                    this.context = response.result.contexts;
+
+                    this._contexts.set(sender, response.result.contexts);
 
                     if (SkypeBot.isDefined(responseMessages) && responseMessages.length > 0) {
                         this.doRichContentResponse(session, response);
@@ -156,120 +131,159 @@ module.exports = class SkypeBot {
     doRichContentResponse(session, response) {
 
         let messages = response.result.fulfillment.messages;
-        let intent = response.result.metadata.intentName;
         let entity = response.result.metadata.entity;
-        let reply = this.createReplies(intent);
+        let responseText = response.result.fulfillment.speech;
         let message = messages[0];
 
-        switch (message.type) {
-            //message.type 0 means text message
-            case 0:
-                {
-                    if (SkypeBot.isDefined(reply)) {
-                        session.send(reply);
+        this.createReplies(response.result).then(function(data) {
+
+            switch (message.type) {
+                //message.type 0 means text message
+                case 0:
+                    {
+                        if (responseText && responseText != "") {
+                            session.send(responseText);
+                        } else if (SkypeBot.isDefined(data)) {
+                            session.send(data);
+                        }
                     }
+                    break;
 
-                }
+                    //message.type 1 means card message
+                case 1:
+                    {
+                        let heroCard = new botbuilder.HeroCard(session).title(message.title);
 
-                break;
+                        if (SkypeBot.isDefined(message.subtitle)) {
+                            heroCard = heroCard.subtitle(message.subtitle)
+                        }
 
-            //message.type 1 means card message
-            case 1:
-                {
-                    let heroCard = new botbuilder.HeroCard(session).title(message.title);
+                        if (SkypeBot.isDefined(message.imageUrl)) {
+                            heroCard = heroCard.images([botbuilder.CardImage.create(session, message.imageUrl)]);
+                        }
 
-                    if (SkypeBot.isDefined(message.subtitle)) {
-                        heroCard = heroCard.subtitle(message.subtitle)
-                    }
+                        if (SkypeBot.isDefined(message.buttons)) {
 
-                    if (SkypeBot.isDefined(message.imageUrl)) {
-                        heroCard = heroCard.images([botbuilder.CardImage.create(session, message.imageUrl)]);
-                    }
+                            let buttons = [];
 
-                    if (SkypeBot.isDefined(message.buttons)) {
+                            for (let buttonIndex = 0; buttonIndex < message.buttons.length; buttonIndex++) {
+                                let messageButton = message.buttons[buttonIndex];
+                                if (messageButton.text) {
+                                    let postback = messageButton.postback;
+                                    if (!postback) {
+                                        postback = messageButton.text;
+                                    }
 
-                        let buttons = [];
+                                    let button;
 
-                        for (let buttonIndex = 0; buttonIndex < message.buttons.length; buttonIndex++) {
-                            let messageButton = message.buttons[buttonIndex];
-                            if (messageButton.text) {
-                                let postback = messageButton.postback;
-                                if (!postback) {
-                                    postback = messageButton.text;
+                                    if (postback.startsWith("http")) {
+                                        button = botbuilder.CardAction.openUrl(session, postback, messageButton.text);
+                                    } else {
+                                        button = botbuilder.CardAction.postBack(session, postback, messageButton.text);
+                                    }
+
+                                    buttons.push(button);
                                 }
-
-                                let button;
-
-                                if (postback.startsWith("http")) {
-                                    button = botbuilder.CardAction.openUrl(session, postback, messageButton.text);
-                                } else {
-                                    button = botbuilder.CardAction.postBack(session, postback, messageButton.text);
-                                }
-
-                                buttons.push(button);
                             }
+
+                            heroCard.buttons(buttons);
+
                         }
 
-                        heroCard.buttons(buttons);
+                        let msg = new botbuilder.Message(session).attachments([heroCard]);
+                        session.send(msg);
 
                     }
 
-                    let msg = new botbuilder.Message(session).attachments([heroCard]);
-                    session.send(msg);
+                    break;
 
-                }
+                    //message.type 2 means quick replies message
+                case 2:
+                    {
 
-                break;
+                        let replies = [];
 
-            //message.type 2 means quick replies message
-            case 2:
-                {
+                        let heroCard = new botbuilder.HeroCard(session).title(message.title);
 
-                    let replies = [];
+                        if (SkypeBot.isDefined(message.replies)) {
 
-                    let heroCard = new botbuilder.HeroCard(session).title(message.title);
+                            for (let replyIndex = 0; replyIndex < message.replies.length; replyIndex++) {
+                                let messageReply = message.replies[replyIndex];
+                                let reply = botbuilder.CardAction.postBack(session, messageReply, messageReply);
+                                replies.push(reply);
+                            }
 
-                    if (SkypeBot.isDefined(message.replies)) {
-
-                        for (let replyIndex = 0; replyIndex < message.replies.length; replyIndex++) {
-                            let messageReply = message.replies[replyIndex];
-                            let reply = botbuilder.CardAction.postBack(session, messageReply, messageReply);
-                            replies.push(reply);
+                            heroCard.buttons(replies);
                         }
 
-                        heroCard.buttons(replies);
+                        let msg = new botbuilder.Message(session).attachments([heroCard]);
+                        session.send(msg);
+
                     }
 
-                    let msg = new botbuilder.Message(session).attachments([heroCard]);
-                    session.send(msg);
+                    break;
 
-                }
+                    //message.type 3 means image message
+                case 3:
+                    {
+                        let heroCard = new botbuilder.HeroCard(session).images([botbuilder.CardImage.create(session, message.imageUrl)]);
+                        let msg = new botbuilder.Message(session).attachments([heroCard]);
+                        session.send(msg);
+                    }
 
-                break;
+                    break;
 
-            //message.type 3 means image message
-            case 3:
-                {
-                    let heroCard = new botbuilder.HeroCard(session).images([botbuilder.CardImage.create(session, message.imageUrl)]);
-                    let msg = new botbuilder.Message(session).attachments([heroCard]);
-                    session.send(msg);
-                }
+                default:
 
-                break;
+                    break;
+            }
 
-            default:
+        }, function(err) {
+            console.error(err)
+        });
 
-                break;
-        }
-        //}
     }
 
-    createReplies(intentName) {
-        var type = typeof intentactions[intentName];
-        if (type == 'function') {
-            return intentactions[intentName]();
+    createReplies(result) {
+        let contextObject = {}
+        let inputContext = "";
+        let outputContext = "";
+        let context = result.contexts;
+
+        if (!(context === undefined)) {
+            if (context.length == 1) {
+                outputContext = context[0].name;
+            } else {
+                for (var index = 0; index < context.length; index++) {
+                    for (var index2 = 0; index2 < context.length; index2++) {
+                        if (index === index2) {
+                            continue;
+                        } else {
+                            if (context[index].name.toLowerCase().includes(context[index2].name.toLowerCase())) {
+                                if (inputContext === "") {
+                                    inputContext = context[index2].name;
+                                } else {
+                                    inputContext = inputContext + "," + context[index2].name;
+                                }
+
+                                if (outputContext === "") {
+                                    outputContext = outputContext + "," + context[index].name;
+                                } else {
+                                    outputContext = outputContext + "," + context[index].name;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
-        else
+        contextObject = { "inputContext": inputContext, "outputContext": outputContext };
+
+        let intentName = result.metadata.intentName;
+        var type = typeof xmlHandler['ReadRepliesFromIntents'];
+        if (type == 'function') {
+            return xmlHandler['ReadRepliesFromIntents'](intentName, result.contexts);
+        } else
             return 'There is something missing here. Hope I can serve you some other time.';
     }
 

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Intents>
+
+  <Intent name="Greetings">
+    <Replies inputContext="" outputContext="">
+      <Reply>Hello! How can I help you?</Reply>
+      <Reply>Hi! How can I be of your help</Reply>
+      <Reply>Welcome! How can I help you?</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="Field Vantage Login Issue">
+    <Replies inputContext="" outputContext="">
+      <Reply>Can I know to which organization you are trying to login into Field Vantage?</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="Organization Name">
+    <Replies inputContext="" outputContext="">
+      <Reply>Thank you,Can I know are you using Google Chrome as the web browser?</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="Using Chrome">
+    <Replies inputContext="" outputContext="">
+      <Reply>Thank you,Can I know What is the error message you are getting while trying to access the link?</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="Not Using Chrome">
+    <Replies inputContext="" outputContext="">
+      <Reply>Can you please try using chrome to access Field Vantage URL and let me know if it resolves the issue?</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="Issue Resolved using Chrome">
+    <Replies inputContext="" outputContext="">
+      <Reply>Please always use Chrome as that is the support Browser for Field Vantage Application , Is there anything else i can assist you with today ?</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="Gateway Time Out">
+    <Replies inputContext="" outputContext="">
+      <Reply>Can I please have the URL which you are trying to access for Field Vantage Application?</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="Old FV Url">
+    <Replies inputContext="" outputContext="">
+      <Reply>Please try using this link ge.fv.geoilandgas.com and let me know if its working</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="Issue Resolved Using New URL">
+    <Replies inputContext="" outputContext="">
+      <Reply>Please do not use the old URL which is ge.fieldvantage.geoilandgas.com as it does not exist anymore, hence you were getting that error , going forward please use only ge.fv.geoilandgas.com which is the correct URL.If you would like you can bookmark this URL in your browser,Shall I assist you with the steps to bookmark it?</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="No Bookmark Help Needed">
+    <Replies inputContext="" outputContext="">
+      <Reply>Is there anything else i can assist you with today ?</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="No More Help Needed">
+    <Replies inputContext="" outputContext="">
+      <Reply>Thank you for contacting the GE OIL & GAS Field Vantage Support , Have a Pleasant Day Ahead.</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="Default Fallback Intent">
+    <Replies inputContext="" outputContext="">
+      <Reply>Sorry I could not get you! Type "help" to see some examples you can ask me.</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="ChatEnd">
+    <Replies inputContext="" outputContext="">
+      <Reply>You are welcome.</Reply>
+      <Reply>Welcome!</Reply>
+      <Reply>It was nice having you here</Reply>
+      <Reply>Welcome! I hope I was helpful</Reply>
+      <Reply>Great to have you here! Have a Nice Day!</Reply>
+      <Reply>You are welcome, Have a good time</Reply>
+      <Reply>You are welcome, hope you have a good experience with GE :)</Reply>
+    </Replies>
+  </Intent>
+
+</Intents>

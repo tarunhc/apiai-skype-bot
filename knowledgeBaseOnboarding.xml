@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Intents>
+
+  <Intent name="Greetings">
+    <Replies inputContext="" outputContext="">
+      <Reply>Hello! How can I help you?</Reply>
+      <Reply>Hi! How can I be of your help</Reply>
+      <Reply>Welcome! How can I help you?</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="IssueSezId">
+    <Replies inputContext="" outputContext="IssueSezId-followup">
+      <Reply>Do you have your SSO and Email ID Created?</Reply>
+      <Reply>Are your Email ID and SSO ready?</Reply>
+    </Replies>
+  </Intent>
+  <Intent name="IssueSezId - no">
+    <Replies inputContext="IssueSezId-followup" outputContext="IssueSezId-followup-No">
+      <Reply>Please get in touch with your manager and get your SSO/Email ID created.</Reply>
+      <Reply>SSO is mandatory for SEZ ID card. Please get it created first.</Reply>
+    </Replies>
+  </Intent>
+  <Intent name="IssueSezId - yes">
+    <Replies inputContext="IssueSezId-followup" outputContext="IssueSezId-followup-yes">
+      <Reply>Contact Mr. Kanhaiya (Cubicle-1, 4th floor) along with the below details:
+              1. Name
+              2. SSO
+              3. Laptop Id (If Given)</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="RegisterSso">
+    <Replies inputContext="" outputContext="RegisterSso-followup">
+      <Reply>Have you received a SSO prior to joining?</Reply>
+      <Reply>Are you aware of your SSO Id?</Reply>
+      <Reply>Do you have a SSO Id?</Reply>
+    </Replies>
+  </Intent>
+  <Intent name="RegisterSso - yes">
+    <Replies inputContext="RegisterSso-followup" outputContext="RegisterSso-followup-Yes">
+      <Reply>Please use this link to register your SSO: https://www.ge-registrar.com/gecentral/genericReg.jsp</Reply>
+      <Reply>Follow the mentioned link: https://www.ge-registrar.com/gecentral/genericReg.jsp</Reply>
+    </Replies>
+  </Intent>
+  <Intent name="RegisterSso - yes">
+    <Replies inputContext="RegisterSso-followup" outputContext="RegisterSso-followup-No">
+      <Reply>Please get in touch with your manager and obtain your SSO.</Reply>
+      <Reply>Kindly follow up with your manager and get you SSO created</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="Default Fallback Intent">
+    <Replies inputContext="" outputContext="">
+      <Reply>Sorry I could not get you! Type "help" to see some examples you can ask me.</Reply>
+    </Replies>
+  </Intent>
+
+  <Intent name="HelpRequested">
+    <Replies inputContext="" outputContext="">
+      <Reply>I can currently help you with items like SSO Registration, SEZ ID issue process. I am still in beta and improving. How can I help you now?</Reply>
+    </Replies>
+    <Replies inputContext="" outputContext="requesthelp">
+      <Reply>I can currently help you with items like SSO Registration, SEZ ID issue process. I am still in beta and improving. How can I help you now?
+      </Reply>
+    </Replies>
+  </Intent>
+  
+ <!--Vitrag Doshi Q3. Apply for Office Badge--> 
+  
+  <Intent name="GetOfficeIDBadge">
+    <Replies inputContext="" outputContext="LinkGiven">
+      <Reply>Your manager may have shared the link for Badge creation. If not, then apply via following link : http://supportcentral.ge.com/ProcessMaps/form_new_request.asp?prod_id=288486&form_id=505297&node_id=1557417&map_id=&reference_id=&reference_type=</Reply>
+    </Replies>
+  </Intent>
+  
+  <Intent name="Link Issue">
+    <Replies inputContext="LinkGiven" outputContext="ContactIT">
+      <Reply>Please contact the IT desk at your floor for network/IT related issues. They will help you.</Reply>  
+      <Reply>Please get in touch with the IT desk for assistance.</Reply>
+    </Replies>
+  </Intent>
+  
+  <Intent name="AccessRequirements">
+    <Replies inputContext="LinkGiven" outputContext="NoRestrictedAreas">
+      <Reply>Please select “No” to the question in the form.</Reply>  
+      <Reply>There is no requirement to access restricted areas currently.</Reply>
+    </Replies>
+  </Intent>
+  
+  <Intent name="Photo Not Accepted">
+    <Replies inputContext="LinkGiven ContactIT" outputContext="PhotoSpecsGiven">
+      <Reply>Please ensure the photo size is <25KB, file type is .jpg and the background color is white (or off-white). If the photo attachment is >25KB your request will be rejected. You can visit www.optimizilla.com to compress your images.</Reply>  
+    </Replies>
+  </Intent>
+  
+  <Intent name="Facility Doubt">
+    <Replies inputContext="LinkGiven ContactIT PhotoSpecsGiven" outputContext="OtherFacility">
+      <Reply>Please select the “Others” option for this.</Reply>
+	  <Reply>Kindly select "Others" option in this field.</Reply>
+    </Replies>
+  </Intent>
+  
+  <Intent name="Is Request Submitted">
+    <Replies inputContext="LinkGiven ContactIT PhotoSpecsGiven OtherFacility" outputContext="MailOnRequestSubmission">
+      <Reply>You will receive a mail on your Outlook ID on successful submission of your request.</Reply>
+    </Replies>
+  </Intent>
+  
+  <Intent name="Badge Arrival">
+    <Replies inputContext="LinkGiven ContactIT NoRestrictedAreas PhotoSpecsGiven OtherFacility" outputContext="MailOnEachStepOfWorkflow">
+      <Reply>You will be communicated through mail on every stage of the workflow request. Kindly check your mail.</Reply>
+    </Replies>
+  </Intent>
+  
+  <Intent name="OtherBadgeDoubts">
+    <Replies inputContext="" outputContext="ContactHR">
+      <Reply>Please contact the HR or your manager for any guidance related to your badge request.</Reply> 
+	  <Reply>Ask your manager or HR for any queries related to the form.</Reply>
+    </Replies>
+  </Intent>
+  
+<!--Vitrag Doshi-->  
+
+  <Intent name="ChatEnd">
+    <Replies inputContext="" outputContext="">
+      <Reply>You are welcome.</Reply>
+      <Reply>Welcome!</Reply>
+      <Reply>It was nice having you here</Reply>
+      <Reply>Welcome! I hope I was helpful</Reply>
+      <Reply>Great to have you here! Have a Nice Day!</Reply>
+      <Reply>You are welcome, Have a good time</Reply>
+      <Reply>You are welcome, Hope you have a wonderful experience with GE</Reply>
+    </Replies>
+  </Intent>
+
+</Intents>
