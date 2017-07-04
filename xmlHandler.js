@@ -11,7 +11,7 @@ var xmlHandler = {
     'ReadRepliesFromIntents': function(intentName, context) {
         let inputContext = "";
         let outputContext = "";
-        if (!(context === undefined)) {
+        if (!(context === undefined || context.length == 0)) {
             if (context.length == 1) {
                 outputContext = context[0].name;
             } else if (context.length == 2) {

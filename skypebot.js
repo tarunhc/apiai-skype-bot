@@ -250,7 +250,7 @@ module.exports = class SkypeBot {
         let outputContext = "";
         let context = result.contexts;
 
-        if (!(context === undefined)) {
+        if (!(context === undefined || context.length == 0)) {
             if (context.length == 1) {
                 outputContext = context[0].name;
             } else {
