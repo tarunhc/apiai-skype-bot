@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Intents>
 
-<!--ISSUE SEZ ID-->
+
   <Intent name="Greetings">
     <Replies inputContext="" outputContext="">
       <Reply>Hello! How can I help you?</Reply>
@@ -17,13 +17,13 @@
     </Replies>
   </Intent>
   <Intent name="IssueSezId - no">
-    <Replies inputContext="IssueSezId-followup" outputContext="IssueSezId-followup-No,IssueSezId-no-followup">
+    <Replies inputContext="IssueSezId-followup" outputContext="IssueSezId-no-followup">
       <Reply>Please get in touch with your manager and get your SSO/Email ID created.</Reply>
       <Reply>SSO is mandatory for SEZ ID card. Please get it created first with the help of your manager.</Reply>
     </Replies>
   </Intent>
   <Intent name="IssueSezId - no - Then What">
-    <Replies inputContext="IssueSezId-followup-No,IssueSezId-no-followup" outputContext="IssueSezId-followup-yes">
+    <Replies inputContext="IssueSezId-no-followup" outputContext="IssueSezId-followup-yes">
       <Reply>Contact Mr. Kanhaiya (Cubicle-1, 4th floor) along with the below details:
               1. Name
               2. SSO
@@ -38,11 +38,9 @@
               3. Laptop Id (If Given)</Reply>
     </Replies>
   </Intent>
-<!--ISSUE SEZ ID End-->
 
   
   
-<!--Register SSO-->
   
   <Intent name="RegisterSso">
     <Replies inputContext="" outputContext="RegisterSso-followup">
@@ -58,23 +56,21 @@
     </Replies>
   </Intent>
   <Intent name="RegisterSso - no">
-    <Replies inputContext="RegisterSso-followup" outputContext="RegisterSso-followup-No,RegisterSso-no-followup">
+    <Replies inputContext="RegisterSso-followup" outputContext="RegisterSso-no-followup">
       <Reply>Please get in touch with your manager and obtain your SSO.</Reply>
       <Reply>Kindly follow up with your manager and get you SSO created</Reply>
     </Replies>
   </Intent>
   <Intent name="RegisterSso - no - Then What">
-    <Replies inputContext="RegisterSso-no-followup,RegisterSso-followup-No" outputContext="RegisterSso-followup-Yes">
+    <Replies inputContext="RegisterSso-no-followup" outputContext="RegisterSso-followup-Yes">
       <Reply>Please get in touch with your manager and obtain your SSO.</Reply>
       <Reply>Kindly follow up with your manager and get you SSO created</Reply>
     </Replies>
   </Intent>
-<!--Register SSO END-->
 
   
 
   
-<!--SSO Password Forgot-->
   
   <Intent name="SSOPasswordForgot">
     <Replies inputContext="" outputContext="SSOPasswordForgot-followup">
@@ -91,21 +87,19 @@
   </Intent>
 
   <Intent name="SSOPasswordForgot - no">
-    <Replies inputContext="SSOPasswordForgot-followup" outputContext="SSOPasswordForgot-followup-No">
+    <Replies inputContext="SSOPasswordForgot-followup" outputContext="SSOPasswordForgot-no-followup">
       <Reply>Please get in touch with your manager and get the SSO creation initiated; if not yet done.</Reply>
     </Replies>
   </Intent>
   
   <Intent name="SSOPasswordForgot - no - Then What">
-    <Replies inputContext="SSOPasswordForgot-no-followup,SSOPasswordForgot-followup-No" outputContext="SSOPasswordForgot-followup-Yes">
+    <Replies inputContext="SSOPasswordForgot-no-followup" outputContext="SSOPasswordForgot-followup-Yes">
       <Reply>Please go to https://oneidm.ge.com/ and reset you password. Contact IT team if you face some issues.</Reply>
     </Replies>
   </Intent>
-<!--SSO Password Forgot END-->
     
 	
 	
-<!--Get Office ID Badge End-->
 
   <Intent name="GetOfficeIDBadge">
     <Replies inputContext="" outputContext="GetOfficeIDBadge-followup">
@@ -115,7 +109,7 @@
 
   <Intent name="GetOfficeIDBadge - yes">
     <Replies inputContext="GetOfficeIDBadge-followup" outputContext="GetOfficeIDBadge-followup-Yes">
-      <Reply>Please follow the link here and add your basic details: http://supportcentral.ge.com/ProcessMaps/form_new_request.asp?prod_id=288486&form_id=505297&node_id=1557417&map_id=&reference_id=&reference_type=
+      <Reply>Please follow the link here and add your basic details: Link
             Please make sure the size of the picture you upload is less than 25 KB in size and with a white backgorund</Reply>
     </Replies>
   </Intent>
@@ -134,26 +128,26 @@
   </Intent>
   
   <Intent name="Photo Not Accepted">
-    <Replies inputContext="GetOfficeIDBadge-followup,ContactIT" outputContext="PhotoSpecsGiven">
-      <Reply>Please ensure the photo size is <25KB, file type is .jpg and the background color is white (or off-white). If the photo attachment is >25KB your request will be rejected. You can visit www.optimizilla.com to compress your images.</Reply>  
+    <Replies inputContext="GetOfficeIDBadge-followup" outputContext="PhotoSpecsGiven">
+      <Reply>Please ensure the photo size is less then 25KB, file type is .jpg and the background color is white (or off-white). If the photo attachment is greater than 25KB your request will be rejected. You can visit www.optimizilla.com to compress your images.</Reply>  
     </Replies>
   </Intent>
   
   <Intent name="Facility Doubt">
-    <Replies inputContext="GetOfficeIDBadge-followup,ContactIT,PhotoSpecsGiven" outputContext="OtherFacility">
+    <Replies inputContext="GetOfficeIDBadge-followup" outputContext="OtherFacility">
       <Reply>Please select the “Others” option for this.</Reply>
 	  <Reply>Kindly select "Others" option in this field.</Reply>
     </Replies>
   </Intent>
   
   <Intent name="Is Request Submitted">
-    <Replies inputContext="GetOfficeIDBadge-followup,ContactIT,PhotoSpecsGiven,OtherFacility" outputContext="MailOnRequestSubmission">
+    <Replies inputContext="GetOfficeIDBadge-followup" outputContext="MailOnRequestSubmission">
       <Reply>You will receive a mail on your Outlook ID on successful submission of your request.</Reply>
     </Replies>
   </Intent>
   
   <Intent name="Badge Arrival">
-    <Replies inputContext="GetOfficeIDBadge-followup,ContactIT,NoRestrictedAreas,PhotoSpecsGiven,OtherFacility" outputContext="MailOnEachStepOfWorkflow">
+    <Replies inputContext="GetOfficeIDBadge-followup" outputContext="MailOnEachStepOfWorkflow">
       <Reply>You will be communicated through mail on every stage of the workflow request. Kindly check your mail.</Reply>
     </Replies>
   </Intent>
@@ -164,143 +158,7 @@
 	  <Reply>Ask your manager or HR for any queries related to the form.</Reply>
     </Replies>
   </Intent> 
-<!--Get Office ID Badge End-->
 
-<!--Add Bank Details-->
-  <Intent name="AddBankDetails">
-    <Replies inputContext="" outputContext="StepsAddBank">
-      <Reply>
-		  You can go to the following link and follow these steps to register your bank account details
-		  
-		  Step 1: Visit the following link: onehr.ge.com and login using your SSO ID.
-		  Step 2: Click on the Pay & Taxes tab and click on the Ramco Portal Home under the header Payroll Links.
-		  Step 3: As you land on the Ramco Portal, Find My Inputs tab and click on Employee Bank Details.
-		  Step 4: Fill in your account details under Payment Account Details.
-		  
-		  Can I help you with anything else?
-	  </Reply>
-    </Replies>
-  </Intent>
-  
-  <Intent name="BankDetailAddIssue-RamcoError">
-    <Replies inputContext="StepsAddBank" outputContext="BankDetailAddIssue-followup">
-      <Reply>
-		  Ramco portal takes upto 48 hours to be activated after your hiring process, please try again after this period.
-		  If you are still not able to log in to Ramco portal, then contact your HR Manager for further assistance.
-		  
-		  Can I help you with anything else?
-	  </Reply> 
-    </Replies>
-  </Intent>
-  
-  <Intent name="BankDetailAddIssue-NotListed">
-    <Replies inputContext="StepsAddBank,BankDetailsAddIssue-followup" outputContext="BankDetailAddIssue-followup">
-      <Reply>
-		If the Bank Name is "Not Applicable", then click onto the Search icon which is available near the Electronic Transfer.
-		A new window will ask for Bank Name, Branch name, etc.
-		  
-		In that enter your Bank name % without space. 
-		For Example: Bank name is HDFC. enter as %HDFC% then click onto search. You will get a list of bank and branch. Choose your bank details and submit it.
-		  
-		Do you require any further help?
-	  </Reply> 
-    </Replies>
-  </Intent>
-  
-  <Intent name="BankDetailsNotOnRamco">
-    <Replies inputContext="StepsAddBank,BankDetailsAddIssue-followup" outputContext="StepsForBankRequest">
-      <Reply>
-		  Sometimes you won't get the respective branch in search list then write a mail to Anil Lande at 'Anil.Lande@ramco.com' with the following details.
-			  
-		  SSO ID:Bank: 
-		  Address: 
-		  State: 
-		  District: 
-		  Branch:
-		  Contact Number of Bank(If any):
-		  IFSC Code: ***********(used for RTGS, IMPS and NEFT transactions)
-	      Branch Code: 
-		  MICR Code: 
-			  
-		  Can I help you with anything else?
-	  </Reply> 
-    </Replies>
-  </Intent>
-<!--Add Bank Details End-->  
-
-<!--Request for Software-->  
-  <Intent name="InstallSoftware">
-    <Replies inputContext="" outputContext="StepsForInstalling">
-      <Reply>
-		  Step 1: Go to Mytech through this link: https://mytech.ge.com and login if required. 
-		  Step 2: Once into the portal, you can request for new software by clicking on Request new software or install option. 
-		  Step 3: Choose your device/OS type and search for the software you need. 
-		  Step 4: Select the software from the search results and go ahead and install on your workstation.
-		  
-		  Can I help you with anything else?
-	  </Reply> 
-    </Replies>
-  </Intent>
-  
-  <Intent name="SoftwareUnavailable">
-    <Replies inputContext="StepsForInstalling" outputContext="StepsForRequest">
-      <Reply>
-		  If your required software is not present on the mytech portal, then follow these steps to request for the software.
-		  
-		  Step 1: On the mytech portal, click on request new technology and select the appropriate platform for which you require the software.
-		  Step 2: Type the software name and click on search.
-		  Step 3: Click on Request new software to be added to the catalog for your business when the search yields no results.
-		  Step 4: Complete the required form and Submit your request.
-		  
-		  Based upon the legibility of the software request, the concerned software will be made available within a few days
-		  If the software is still not available, then contact the IT desk personnel.
-		  
-		  Do you need any further assistance?
-	  </Reply> 
-    </Replies>
-  </Intent>
-<!--Request for Software End-->
-  
-<!--Apply for leaves -->
-  <Intent name="Apply Leave">
-    <Replies inputContext="" outputContext="RamcoLeave">
-      <Reply>
-		  Kindly go to the Ramco portal through http://onehr.ge.com to apply for a leave.
-		  To check the Leave Policy, Go to http://benefits.ge.com, Click on Benefits, and under Work Life Balance, Click Leave Policy.
-	  </Reply>
-    </Replies>
-  </Intent>
-  
-  <Intent name="RamcoLeaveNav">
-    <Replies inputContext="RamcoLeave" outputContext="RamcoNavigation">
-      <Reply>Check out the My Leave section on the middle of the page and click “Quick Request”.</Reply>
-      <Reply>Click the “Quick Request” link on the middle of the page.</Reply>
-    </Replies>
-  </Intent>
-  
-  <Intent name="LeaveType">
-    <Replies inputContext="RamcoNavigation,RamcoLeave" outputContext="TypeOfLeaves">
-      <Reply>Select the type of leave appropriately based on whatever is applicable to you.</Reply>
-    </Replies>
-  </Intent>
-  
-  <Intent name="LeaveGrant">
-    <Replies inputContext="RamcoLeave,RamcoNavigation,TypeOfLeaves" outputContext="LeaveConfirmation">
-      <Reply>You will receive a mail on your Outlook regarding the confirmation.</Reply>
-	  <Reply>Kindly check your Outlook ID for the grant request status.</Reply>
-    </Replies>
-  </Intent>
-  
-  <Intent name="InformManager">
-    <Replies inputContext="RamcoLeave,RamcoNavigation,LeaveConfirmation,TypeOfLeaves" outputContext="ManagerNotify">
-      <Reply>Yes kindly inform your manager or respective supervisor about your leave.</Reply>
-	  <Reply>Yes you are required to ask your manager about the leave in advance.</Reply>
-	  <Reply>Obviously!</Reply>
-    </Replies>
-  </Intent>
-<!--Apply for leaves End --> 
-
-<!--User Happy-->   
   <Intent name="User Happy">
     <Replies inputContext="" outputContext="UserHappy-followup">
       <Reply>Is there anything else that i can help you with ?</Reply>
@@ -318,7 +176,6 @@
       <Reply>It was Nice to talk to you , Have a Nice day ahead.</Reply>
     </Replies>
   </Intent>
-<!--User Happy End--> 
   
   <Intent name="Link Issue">
     <Replies inputContext="" outputContext="ContactIT">
@@ -349,7 +206,6 @@
 	  * How to recover Forgot SSO Password ?
 	  * How to get Office Badge Id ?
 	  I am still in beta and improving. How can I help you now?</Reply>
-    </Replies>
     </Replies>
   </Intent>
 
